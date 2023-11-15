@@ -16,6 +16,19 @@ namespace Products_API.Controllers
         {
             hoaDonServices = new HoaDonServices();
         }
+        [HttpGet]
+        public IActionResult AddHoaDon(
+            int? month = null,
+            int? year = null,
+            DateTime? tuNgay = null,
+            DateTime? denNgay = null,
+            int? giaMin = null,
+            int? giaMax = null
+            )
+        {
+            var result = hoaDonServices.GetHoaDon(month, year, tuNgay, denNgay, giaMin, giaMax);
+                return Ok(result);
+        }
 
         [HttpPost("add")]
         public IActionResult AddHoaDon([FromBody] HoaDon hoaDon)

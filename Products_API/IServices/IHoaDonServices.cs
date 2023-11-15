@@ -8,5 +8,14 @@ namespace Products_API.IServices
         ErrorHelper AddHoaDon(HoaDon hoaDon);
         ErrorHelper EditHoaDon(HoaDon hoaDon);
         ErrorHelper DeleteHoaDon(int hoaDonID);
+        public IQueryable<HoaDon> GetHoaDon
+            (
+            int? month =null,
+            int? year = null,
+            DateTime? tuNgay = null,
+            DateTime? denNgay = null,
+            int? giaMin = null,
+            int? giaMax = null
+            );
     }
 }

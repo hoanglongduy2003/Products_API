@@ -1,4 +1,5 @@
-﻿using Products_API.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Products_API.Entities;
 using Products_API.Helper;
 using Products_API.IServices;
 
@@ -133,6 +134,43 @@ namespace Products_API.Services
             DbContext.Remove(checkHoaDon);
             DbContext.SaveChanges();
             return ErrorHelper.ThanhCong;
+        }
+
+        public IQueryable<HoaDon> GetHoaDon(
+            int? month = null,
+            int? year = null,
+            DateTime? tuNgay = null,
+            DateTime? denNgay = null,
+            int? giaMin = null,
+            int? giaMax = null
+            )
+        {
+            var query = DbContext.HoaDon.Include(x => x.ChiTietHoaDons).OrderByDescending(x => x.ThoiGianTao).AsQueryable();
+            if (month.HasValue)
+            {
+                query = query.Where(x => x.ThoiGianTao.Month == month);
+            }
+            if (year.HasValue)
+            {
+                query = query.Where(x => x.ThoiGianTao.Year == year);
+            }
+            if (tuNgay.HasValue)
+            {
+                query = query.Where(x => x.ThoiGianTao.Date >= tuNgay);
+            }
+            if (denNgay.HasValue)
+            {
+                query = query.Where(x => x.ThoiGianTao.Date <= denNgay);
+            }
+            if (giaMin.HasValue)
+            {
+                query = query.Where(x => x.TongTien <= giaMin);
+            }
+            if (giaMax.HasValue)
+            {
+                query = query.Where(x => x.TongTien <= giaMax);
+            }
+            return query;
         }
     }
 }
