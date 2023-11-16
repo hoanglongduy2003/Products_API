@@ -137,15 +137,21 @@ namespace Products_API.Services
         }
 
         public IQueryable<HoaDon> GetHoaDon(
+            string? keywords,
             int? month = null,
             int? year = null,
             DateTime? tuNgay = null,
             DateTime? denNgay = null,
             int? giaMin = null,
-            int? giaMax = null
+            int? giaMax = null,
+            Pagination pagination = null
             )
         {
             var query = DbContext.HoaDon.Include(x => x.ChiTietHoaDons).OrderByDescending(x => x.ThoiGianTao).AsQueryable();
+            if(!string.IsNullOrEmpty(keywords))
+            {
+                query = query.Where(x => x.TenHoaDon.ToLower().Contains(keywords) || x.MaGiaoDich.ToLower().Contains(keywords));
+            }
             if (month.HasValue)
             {
                 query = query.Where(x => x.ThoiGianTao.Month == month);
@@ -164,7 +170,7 @@ namespace Products_API.Services
             }
             if (giaMin.HasValue)
             {
-                query = query.Where(x => x.TongTien <= giaMin);
+                query = query.Where(x => x.TongTien >= giaMin);
             }
             if (giaMax.HasValue)
             {

@@ -18,16 +18,21 @@ namespace Products_API.Controllers
         }
         [HttpGet]
         public IActionResult AddHoaDon(
-            int? month = null,
-            int? year = null,
-            DateTime? tuNgay = null,
-            DateTime? denNgay = null,
-            int? giaMin = null,
-            int? giaMax = null
+            [FromQuery]string? keywords,
+            [FromQuery]int? month = null,
+            [FromQuery]int? year = null,
+            [FromQuery]DateTime? tuNgay = null,
+            [FromQuery]DateTime? denNgay = null,
+            [FromQuery]int? giaMin = null,
+            [FromQuery]int? giaMax = null,
+            [FromQuery]Pagination pagination = null
             )
         {
-            var result = hoaDonServices.GetHoaDon(month, year, tuNgay, denNgay, giaMin, giaMax);
-                return Ok(result);
+            var query = hoaDonServices.GetHoaDon(keywords, month, year, tuNgay, denNgay, giaMin, giaMax, pagination);
+            var hoaDons = PageResult<HoaDon>.ToPageResult(pagination, query).AsEnumerable();
+            pagination.TotalCount = query.Count();
+            var res = new PageResult<HoaDon>(pagination, hoaDons);
+            return Ok(res);
         }
 
         [HttpPost("add")]

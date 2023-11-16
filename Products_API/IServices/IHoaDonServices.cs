@@ -10,12 +10,14 @@ namespace Products_API.IServices
         ErrorHelper DeleteHoaDon(int hoaDonID);
         public IQueryable<HoaDon> GetHoaDon
             (
+            string? keywords,
             int? month =null,
             int? year = null,
             DateTime? tuNgay = null,
             DateTime? denNgay = null,
             int? giaMin = null,
-            int? giaMax = null
+            int? giaMax = null,
+            Pagination pagination = null
             );
     }
 }
